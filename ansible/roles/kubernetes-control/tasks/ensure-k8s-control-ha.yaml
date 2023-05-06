@@ -34,7 +34,7 @@
           priority priority {{ ip_addr.split('.')[3] }}
           authentication {
               auth_type PASS
-              auth_pass {{ lookup('ansible.builtin.env', 'KEEPALIVED_AUTH_PASSWORD') }}
+              auth_pass {{ lookup('password', '/dev/null chars=ascii_lowercase length=20') }}
           }
           virtual_ipaddress {
               "{{ kube_api_server_vip }}"

@@ -1,0 +1,33 @@
+---
+- name: Ensure Baseline apt Packages
+  apt:
+    update_cache: yes
+    pkg: '{{ apt_packages }}'
+  tags:
+  - baseline-apt
+
+- name: Ensure Additional apt Keys
+  apt_key:
+    url: "{{ item }}"
+  loop: "{{ additional_apt_keys }}"
+  when: additional_apt_keys is defined
+  tags:
+  - baseline-apt
+
+- name: Ensure Additional apt Repos
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  loop: "{{ additional_apt_repos }}"
+  when: additional_apt_repos is defined
+  tags:
+  - baseline-apt
+
+- name: Ensure Additional apt Packages
+  apt:
+    update_cache: no
+    pkg: '{{ additional_apt_packages }}'
+  when: additional_apt_packages is defined
+  tags:
+  - baseline-apt
+...

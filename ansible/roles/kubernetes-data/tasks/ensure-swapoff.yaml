@@ -1,0 +1,24 @@
+---
+- name: Kubernetes Disable SWAP - Ensure Session swapoff
+  shell: |
+    swapoff -a
+  tags:
+  - k8s-data-swap
+
+- name: Kubernetes Disable SWAP - Ensure swap removed from FSTAB
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+  tags:
+  - k8s-data-swap
+
+#--Ubuntu 22.04 can leave this big file behind even when swap if off.
+#--Thanks for that! Might only be an LVM thing but setting absent won't hurt...
+- name: Kubernetes Disable Swap - Ensure swap.img deleted
+  file:
+    path: "/swap.img"
+    state: absent
+  tags:
+  - k8s-data-swap
+...

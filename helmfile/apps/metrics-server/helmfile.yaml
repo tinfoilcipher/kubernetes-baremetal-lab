@@ -1,0 +1,21 @@
+repositories:
+  - name: metrics-server
+    url: 	https://kubernetes-sigs.github.io/metrics-server/
+
+releases:
+  - name: metrics-server
+    namespace: metrics-server
+    chart: metrics-server/metrics-server
+    version: 3.2.8
+    atomic: true
+    timeout: 300
+    labels:
+      app: metrics-server
+      tier: infra
+    values:
+      - values_metrics.yaml.gotmpl
+
+environments:
+  default:
+    values:
+    - ../../values.yaml

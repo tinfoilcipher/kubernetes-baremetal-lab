@@ -1,0 +1,38 @@
+---
+- name: System Baseline wheel Config - Ensure wheel Group
+  group:
+    name: wheel
+    state: present
+  tags:
+  - baseline-users
+
+- name: System Baseline wheel Config - Ensure Ansible Service Account to wheel
+  user:
+    name: "{{ ansible_user }}"
+    groups: wheel
+    append: yes
+  tags:
+  - baseline-users
+
+- name: System Baseline wheel Config - Ensure PASSWORDLESS sudo Allowed For wheel Group
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+  tags:
+  - baseline-users
+
+- name: System Baseline wheel Config - Ensure Standard Users With sudo Rights
+  user:
+    name: '{{ item }}'
+    shell: /bin/bash
+    groups: wheel
+    append: yes
+    state: present
+    createhome: yes
+  loop: "{{ system_users }}"
+  tags:
+  - baseline-users
+...

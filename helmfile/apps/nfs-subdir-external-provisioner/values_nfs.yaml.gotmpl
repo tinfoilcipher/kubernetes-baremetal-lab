@@ -1,0 +1,36 @@
+image:
+  tag: v4.0.2
+  pullPolicy: {{ .Values.global.imagePullPolicy }}
+
+resources:
+  limits:
+    cpu: "25m"
+    memory: "32Mi"
+  requests:
+    cpu: "20m"
+    memory: "32Mi"
+
+nfs:
+  server: {{ .Values.nfsSubdirProvisioner.host.server }}
+  path: {{ .Values.nfsSubdirProvisioner.host.path }}
+  mountOptions:
+    - nolock
+
+storageClass:
+  provisionerName: "nfs-provisioner"
+  name:  "nfs-provisioner"
+  reclaimPolicy: {{ .Values.nfsSubdirProvisioner.reclaimPolicy }}
+  defaultClass: {{ .Values.nfsSubdirProvisioner.isDefault }}
+
+replicaCount: {{ .Values.nfsSubdirProvisioner.replicaCount }}
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchExpressions:
+        - key: app
+          operator: In
+          values:
+          - nfs-subdir-external-provisioner
+      topologyKey: "failure-domain.beta.kubernetes.io/zone"

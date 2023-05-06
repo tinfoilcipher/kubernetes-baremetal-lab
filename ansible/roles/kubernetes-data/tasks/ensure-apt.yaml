@@ -1,0 +1,33 @@
+---
+- name: Ensure Kubernetes Dependancy Packages
+  apt:
+    update_cache: yes
+    pkg:
+      - docker.io
+      - nfs-common
+  tags:
+  - k8s-data-apt
+
+- name: Ensure Kubernetes apt Key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  tags:
+  - k8s-data-apt
+
+- name: Ensure Kubernetes apt Repo
+  apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+  tags:
+  - k8s-data-apt
+
+- name: Ensure Kubernetes apt Packages
+  apt:
+    update_cache: yes
+    pkg:
+      - "kubectl={{ kubernetes_version }}-00"
+      - "kubeadm={{ kubernetes_version }}-00"
+      - "kubelet={{ kubernetes_version }}-00"
+  tags:
+  - k8s-data-apt
+...

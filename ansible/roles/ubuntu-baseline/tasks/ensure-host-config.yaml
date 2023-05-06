@@ -1,0 +1,91 @@
+---
+- name: System Baseline Hostname Config - Ensure System Hostname
+  hostname:
+    name: "{{ inventory_hostname }}.{{ system_domain }}"
+  tags:
+  - baseline-host
+
+- name: System Baseline Hostname Config - Ensure Hostname In Hosts File
+  lineinfile:
+    path: /etc/hosts
+    line: "127.0.1.1 {{ inventory_hostname }}.{{ system_domain }}"
+    state: present
+    backup: yes
+  tags:
+  - baseline-host
+
+- name: System Baseline Network Configuration - Ensure Initial Setup Netplan Deleted
+  file:
+    path: /etc/netplan/00-installer-config.yaml
+    state: absent
+  when: "'dns' not in inventory_hostname"
+  tags:
+  - baseline-host
+
+- name: System Baseline Network Configuration - Ensure Ansible Managed Netplan
+  blockinfile:
+    path: /etc/netplan/99_config.yaml
+    mode: '0644'
+    owner: root
+    group: root
+    create: true
+    block: |
+      network:
+        version: 2
+        renderer: networkd
+        ethernets:
+          {{ network_interface_name }}:
+            addresses:
+            - {{ ip_addr }}/24
+            gateway4: 192.168.1.1
+            nameservers:
+              addresses:
+              - 192.168.1.11
+              search:
+              - {{ system_domain }}
+  notify:
+    - apply netplan
+  tags:
+  - baseline-host
+
+- name: System Baseline Time Config - Set Timezone
+  timezone:
+    name: Europe/London
+  register: timezone
+  tags:
+  - baseline-host
+
+- name: System Baseline Time Config - Ensure timesync Configuration
+  copy:
+    src: "{{ role_path }}/files/timesyncd.conf"
+    dest: /etc/systemd/timesyncd.conf
+    mode: '0644'
+    owner: root
+    group: root
+  notify:
+    - restart timesyncd
+  tags:
+  - baseline-host
+
+- name: System Baseline Time Config - Ensure NTP Ingress Allowed Through Firewall
+  iptables:
+    chain: INPUT
+    protocol: UDP
+    source_port: 123
+    destination_port: 123
+    ctstate: ESTABLISHED
+    jump: ACCEPT
+  tags:
+  - baseline-host
+
+- name: System Baseline Time Config - Ensure NTP Egress Allowed Through Firewall
+  iptables:
+    chain: OUTPUT
+    protocol: UDP
+    source_port: 123
+    destination_port: 123
+    ctstate: NEW,ESTABLISHED
+    jump: ACCEPT
+  tags:
+  - baseline-host
+...

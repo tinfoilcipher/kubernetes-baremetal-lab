@@ -1,0 +1,55 @@
+---
+- name: Ensure Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0700'
+  loop:
+    - /etc/keepalived/
+    - /etc/haproxy/
+  tags:
+  - k8s-ha
+
+- name: Kubernetes Controller HA - Ensure haproxy.cfg
+  template:
+    src: "{{ role_path }}/files/haproxy.cfg.j2"
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: "{{ service_account.name }}"
+    mode: '0755'
+  notify: restart haproxy
+  tags:
+  - k8s-ha2
+
+- name: Kubernetes Controller HA - Ensure keepalived.conf
+  blockinfile:
+    path: /etc/keepalived/keepalived.conf
+    create: true
+    marker: "!-- {mark} ANSIBLE MANAGED BLOCK --"
+    block: |
+      vrrp_instance VI_1 {
+          state MASTER
+          interface "{{ network_interface_name }}"
+          virtual_router_id 100
+          priority priority {{ ip_addr.split('.')[3] }}
+          authentication {
+              auth_type PASS
+              auth_pass {{ lookup('ansible.builtin.env', 'KEEPALIVED_AUTH_PASSWORD') }}
+          }
+          virtual_ipaddress {
+              "{{ kube_api_server_vip }}"
+          }
+      }
+  notify: restart keepalived
+  tags:
+  - k8s-ha
+
+- name: Kubernetes Controller HA - Ensure Docker NO_PROXY
+  lineinfile:
+    path: /lib/systemd/system/docker.service
+    insertafter: '^[Service]'
+    line: Environment=NO_PROXY={{ system_domain }}
+  notify: reload docker
+  tags:
+  - k8s-ha
+...

@@ -1,0 +1,9 @@
+- name: System Baseline Handler - Ensure Netplan
+  command: sudo netplan apply
+  listen: "apply netplan"
+
+- name: System Baseline Handler - Restart systemd-timesyncd
+  service:
+    name: systemd-timesyncd
+    state: restarted
+    listen: "restart timesyncd"

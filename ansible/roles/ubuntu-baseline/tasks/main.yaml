@@ -1,0 +1,13 @@
+---
+- name: System Baseline - Ensure Hostname
+  include: ensure-host-config.yaml
+
+- name: System Baseline - Ensure User Configs
+  include: ensure-users.yaml
+
+- name: System Baseline - Ensure SSH Configs
+  include: ensure-ssh.yaml
+
+- name: System Baseline - Ensure apt Repos and Packages
+  include: ensure-apt.yaml
+...

@@ -1,0 +1,22 @@
+- name: Kubernetes - Restart Docker
+  service:
+    name: docker
+  listen: "restart docker"
+
+- name: Kubernetes - Restart haproxy
+  service:
+    name: haproxy
+    state: restarted
+  listen: restart haproxy
+
+- name: Kubernetes - Restart keepalived
+  service:
+    name: keepalived
+    state: restarted
+  listen: restart keepalived
+
+- name: Kubernetes - Reload docker
+  service:
+    name: docker.service
+    state: reloaded
+  listen: reload docker

@@ -1,0 +1,51 @@
+global:
+  leaderElection:
+    namespace: cert-manager
+
+image:
+  tag: v1.10.0
+  pullPolicy: {{ .Values.global.imagePullPolicy }}
+
+resources:
+  limits:
+    cpu: "250m"
+    memory: "128Mi"
+  requests:
+    cpu: "200m"
+    memory: "128Mi"
+
+installCRDs: true
+
+webhook:
+  image:
+    repository: "{{ .Values.global.customImageRegistry }}/jetstack/cert-manager-webhook"
+    tag: v1.10.0
+    pullPolicy: {{ .Values.global.imagePullPolicy }}
+
+  resources:
+    limits:
+      cpu: "100m"
+      memory: "64Mi"
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+
+cainjector:
+  image:
+    repository: "{{ .Values.global.customImageRegistry }}/jetstack/cert-manager-cainjector"
+    tag: v1.10.0
+    pullPolicy: {{ .Values.global.imagePullPolicy }}
+
+  resources:
+    limits:
+      cpu: "50m"
+      memory: "128Mi"
+    requests:
+      cpu: "50m"
+      memory: "128Mi"
+
+startupapicheck:
+  image:
+    repository: "{{ .Values.global.customImageRegistry }}/jetstack/cert-manager-ctl"
+    tag: v1.10.0
+    pullPolicy: {{ .Values.global.imagePullPolicy }}

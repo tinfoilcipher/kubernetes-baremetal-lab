@@ -1,0 +1,30 @@
+repositories:
+  - name: jetstack
+    url: 	https://charts.jetstack.io
+
+releases:
+  - name: cert-manager
+    namespace: cert-manager
+    chart: jetstack/cert-manager
+    version: 1.10.0
+    timeout: 600
+    labels:
+      app: cert-manager
+      tier: infra
+    values:
+      - values_cert_manager.yaml.gotmpl
+    #--These hook ensure that the PKI is bootstrapped and all
+    #--certificates are active after helm has synced the release
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: kubectl
+      args:
+        - apply
+        - -f
+        - manifests/pki_bootstrap.yaml
+
+environments:
+  default:
+    values:
+    - ../../values.yaml

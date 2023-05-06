@@ -1,0 +1,31 @@
+repositories:
+  - name: bitnami
+    url: 	https://charts.bitnami.com/bitnami
+
+releases:
+  - name: metallb
+    namespace: metallb-system
+    chart: bitnami/metallb
+    version: 4.1.8
+    atomic: true
+    timeout: 300
+    labels:
+      app: metallb
+      tier: infra
+    values:
+      - values_metallb.yaml.gotmpl
+    hooks:
+    #--This hook ensures that the MetalLB address pool
+    #--is defined after helm has synced the release
+    - events: ["postsync"]
+      showlogs: true
+      command: kubectl
+      args: 
+        - apply
+        - -f
+        - manifests/loadbalancer_bootstrap.yaml
+
+environments:
+  default:
+    values:
+    - ../../values.yaml

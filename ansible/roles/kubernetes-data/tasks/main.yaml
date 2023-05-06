@@ -1,0 +1,10 @@
+---
+- name: Kubernetes - Ensure Packages
+  include: ensure-apt.yaml
+
+- name: Kubernetes - Ensure Service Account
+  include: ensure-service-account.yaml
+
+- name: Kubernetes - Ensure Swap Disabled
+  include: ensure-swapoff.yaml
+...

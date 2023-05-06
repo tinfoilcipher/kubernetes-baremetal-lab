@@ -1,0 +1,12 @@
+service_account:
+  name: svc_kubernetes
+  add_to_wheel: yes
+  shell: /bin/bash
+  id: 1004
+  gid: 999
+
+kubernetes_version: 1.25.0 #--See https://github.com/kubernetes/kubernetes/releases
+
+network_interface_name: ens160
+
+kube_api_server_vip:

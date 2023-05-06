@@ -1,0 +1,30 @@
+all:
+  hosts:
+    k8s-control[01:03]:
+    k8s-worker[01:03]:
+  children:
+
+    kubernetes_control_nodes:
+      hosts:
+        k8s-control01:
+          ip_addr: 192.168.1.200
+        mck8s-control02:
+          ip_addr: 192.168.1.201
+        mck8s-control03:
+          ip_addr: 192.168.1.202
+
+    kubernetes_worker_nodes:
+      hosts:
+        k8s-worker01:
+          ip_addr: 192.168.1.210
+        k8s-worker02:
+          ip_addr: 192.168.1.211
+        k8s-worker03:
+          ip_addr: 192.168.1.212
+
+  #--DEFAULT VARS
+  vars:
+    network_interface_name: ens160
+    kubernetes_version: 1.25.0 #--See https://github.com/kubernetes/kubernetes/releases
+    system_users: [] #--Any users you want on each node
+    system_domain: "" #--eg tinfoilcipher.co.uk

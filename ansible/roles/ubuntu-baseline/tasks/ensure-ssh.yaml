@@ -1,0 +1,43 @@
+---
+- name: System Baseline SSH - Ensure SSHD System Configuration
+  copy:
+    src: "{{ role_path }}/files/sshd_config"
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0644'
+  register: sshd_config
+  tags:
+  - baseline-ssh
+
+- name: System Baseline SSH - Ensure Standard User .ssh Directories
+  file:
+    path: /home/{{ item }}/.ssh
+    state: directory
+    mode: '0700'
+    owner: "{{ item }}"
+    group: "{{ item }}"
+  loop: "{{ system_users }}"
+  tags:
+  - baseline-ssh
+
+- name: System Baseline SSH - Ensure Authorised Keys Distributed to Admin Users
+  copy:
+    src: /home/{{ ansible_user }}/.ssh/authorized_keys
+    dest: /home/{{ item }}/.ssh/authorized_keys
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: '0600'
+    remote_src: yes
+  loop: "{{ system_users }}"
+  tags:
+  - baseline-ssh
+
+- name: System Baseline SSH - Restart SSHD
+  service:
+    name: ssh
+    state: restarted
+  when: sshd_config.changed
+  tags:
+  - baseline-ssh
+...

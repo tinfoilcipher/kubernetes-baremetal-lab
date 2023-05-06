@@ -1,0 +1,7 @@
+apt_packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - fail2ban
+
+network_interface_name: ens160

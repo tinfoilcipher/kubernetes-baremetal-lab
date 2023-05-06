@@ -1,0 +1,20 @@
+- name: Administrator KUBECONTEXT - Ensure Directory
+  file:
+    path: "/home/{{ ansible_user }}/.kube"
+    state: directory
+    mode: '0700'
+    owner: svc_mgmt
+    group: root
+  tags:
+  - k8s-control-files
+
+- name: Docker Configuration - Ensure Daemon Config
+  copy:
+    src: "{{ role_path }}/files/docker-daemon.json"
+    dest: /etc/docker/daemon.json
+    mode: '0700'
+    owner: root
+    group: root
+  notify: restart docker
+  tags:
+  - k8s-control-files

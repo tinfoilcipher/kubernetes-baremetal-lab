@@ -1,0 +1,27 @@
+global:
+  imagePullPolicy: IfNotPresent
+  ingressClass: nginx
+
+nfsSubdirProvisioner:
+  customImageRepos:
+    app: sig-storage/nfs-subdir-external-provisioner
+  customImageTags:
+    app: v4.0.2
+  host:
+    server: "" #--Host of your NFS Server
+    path: "" #--Path of your NFS Mount
+  reclaimPolicy: Retain
+  isDefault: true
+  replicaCount: 2
+
+ingressNginx:
+  metalLBloadBalancerIP: 192.168.1.225 #--Host network IP to use for all ingresses
+  httpEnabled: false
+  httpsEnabled: true
+
+metricsServer:
+  tcpPort: 443
+
+kubernetesDashboard:
+  hostname: "" #--hostname for your dashboard. E.G. dashboard.tinfoilcipher.co.uk
+  tcpPort: 80

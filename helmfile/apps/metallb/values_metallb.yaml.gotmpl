@@ -1,0 +1,27 @@
+controller:
+  image:
+    repository: bitnami/metallb-controller
+    tag: 0.13.7-debian-11-r9
+    pullPolicy: {{ .Values.global.imagePullPolicy }}
+
+  resources:
+    limits: 
+      cpu: "100m"
+      memory: "64Mi"
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+
+speaker:
+  image:
+    repository: bitnami/metallb-speaker
+    tag: 0.13.7-debian-11-r8
+    pullPolicy: {{ .Values.global.imagePullPolicy }}
+
+  resources:
+    limits: 
+      cpu: "150m"
+      memory: "64Mi"
+    requests:
+      cpu: "100m"
+      memory: "64Mi"

@@ -1,0 +1,25 @@
+---
+- name: System Baseline
+  hosts: kubernetes_control_nodes:kubernetes_worker_nodes:dns_servers
+  gather_facts: false
+  roles:
+  - role: ubuntu-baseline
+
+- name: Kubernetes Control Plane
+  hosts: kubernetes_control_nodes
+  gather_facts: false
+  roles:
+  - role: kubernetes-control
+    kube_api_server_vip: 192.168.1.220
+
+- name: Kubernetes Data Plane
+  hosts: kubernetes_worker_nodes
+  gather_facts: false
+  roles:
+  - role: kubernetes-data
+
+- name: Bind9 DNS
+  hosts: dns_servers
+  gather_facts: false
+  roles:
+  - role: bind-dns

@@ -1,0 +1,31 @@
+controller:
+  image:
+    image: ingress-nginx/controller
+    tag: v1.4.0
+    pullPolicy: {{ .Values.global.imagePullPolicy }}
+
+  resources:
+    limits: 
+      cpu: "250m"
+      memory: "160m"
+    requests:
+      cpu: "200m"
+      memory: "160m"
+
+admissionWebhooks:
+  patch:
+    enabled: true
+    image:
+      image: ingress-nginx/kube-webhook-certgen
+      tag: v20220916-gd32f8c343
+      pullPolicy: {{ .Values.global.imagePullPolicy }}
+
+controller:
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: Cluster
+    loadBalancerIP: {{ .Values.ingressNginx.metalLBloadBalancerIP }}
+    annotations:
+      metallb.universe.tf/allow-shared-ip: {{ .Values.ingressNginx.metalLBloadBalancerIP }}
+    enableHttp: {{ .Values.ingressNginx.httpEnabled }}
+    enableHttps: {{ .Values.ingressNginx.httpsEnabled }}

@@ -17,9 +17,4 @@
   gather_facts: false
   roles:
   - role: kubernetes-data
-
-- name: Bind9 DNS
-  hosts: dns_servers
-  gather_facts: false
-  roles:
-  - role: bind-dns
+...

@@ -3,10 +3,8 @@ global:
   ingressClass: nginx
 
 nfsSubdirProvisioner:
-  customImageRepos:
-    app: sig-storage/nfs-subdir-external-provisioner
-  customImageTags:
-    app: v4.0.2
+  imageTags:
+    provisioner: v4.0.2
   host:
     server: "" #--Host of your NFS Server
     path: "" #--Path of your NFS Mount
@@ -14,14 +12,33 @@ nfsSubdirProvisioner:
   isDefault: true
   replicaCount: 2
 
+metalLb:
+  imageTags:
+    controller: 0.13.7-debian-11-r9
+    speaker: 0.13.7-debian-11-r8
+
 ingressNginx:
+  imageTags:
+    ingressNginx: v1.4.0
+    admissionWebhooks: v20220916-gd32f8c343
   metalLBloadBalancerIP: 192.168.1.225 #--Host network IP to use for all ingresses
   httpEnabled: false
   httpsEnabled: true
 
+certManager:
+  imageTags:
+    certManager: v1.10.0
+    webhook: v1.10.0
+    cainjector: v1.10.0
+    startupapicheck: v1.10.0
+
 metricsServer:
+  imageTags:
+    server: v0.6.1
   tcpPort: 443
 
 kubernetesDashboard:
+  imageTags:
+    dashboard: v2.7.0
   hostname: "" #--hostname for your dashboard. E.G. dashboard.tinfoilcipher.co.uk
   tcpPort: 80

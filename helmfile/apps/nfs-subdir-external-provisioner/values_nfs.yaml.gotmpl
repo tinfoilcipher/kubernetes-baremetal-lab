@@ -1,5 +1,5 @@
 image:
-  tag: v4.0.2
+  tag: {{ .Values.nfsSubdirProvisioner.imageTags.provisioner }}
   pullPolicy: {{ .Values.global.imagePullPolicy }}
 
 resources:

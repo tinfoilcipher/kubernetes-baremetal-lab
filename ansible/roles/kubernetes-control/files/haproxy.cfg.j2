@@ -50,5 +50,5 @@ backend kubernetes-api
     mode tcp
     balance     roundrobin
 {% for host in groups['kubernetes_control_nodes'] %}
-    server k8s-control0{{ loop.index }}.{{ system_domain }} {{ hostvars[host].ansible_default_ipv4.address }}:6443 check fall 3 rise 2
+    server {{ host }}.{{ system_domain }} {{ hostvars[host].ansible_default_ipv4.address }}:6443 check fall 3 rise 2
 {% endfor %}

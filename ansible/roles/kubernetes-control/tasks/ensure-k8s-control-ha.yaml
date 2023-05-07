@@ -8,7 +8,7 @@
     - /etc/keepalived/
     - /etc/haproxy/
   tags:
-  - k8s-ha
+  - k8s-control-ha
 
 - name: Kubernetes Controller HA - Ensure haproxy.cfg
   template:
@@ -19,7 +19,7 @@
     mode: '0755'
   notify: restart haproxy
   tags:
-  - k8s-ha2
+  - k8s-control-ha
 
 - name: Kubernetes Controller HA - Ensure keepalived.conf
   blockinfile:
@@ -34,7 +34,7 @@
           priority priority {{ ip_addr.split('.')[3] }}
           authentication {
               auth_type PASS
-              auth_pass {{ lookup('password', '/dev/null chars=ascii_lowercase length=20') }}
+              auth_pass {{ keepalived_shared_secret | default(lookup('password', '/dev/null chars=ascii_lowercase length=20')) }}
           }
           virtual_ipaddress {
               "{{ kube_api_server_vip }}"
@@ -42,7 +42,7 @@
       }
   notify: restart keepalived
   tags:
-  - k8s-ha
+  - k8s-control-ha
 
 - name: Kubernetes Controller HA - Ensure Docker NO_PROXY
   lineinfile:
@@ -51,5 +51,5 @@
     line: Environment=NO_PROXY={{ system_domain }}
   notify: reload docker
   tags:
-  - k8s-ha
+  - k8s-control-ha
 ...

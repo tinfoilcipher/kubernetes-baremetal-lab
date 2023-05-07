@@ -1,6 +1,7 @@
 image:
   image: kubernetesui/dashboard
   pullPolicy: {{ .Values.global.imagePullPolicy }}
+  tag: {{ .Values.kubernetesDashboard.imageTags.dashboard }}
 
 resources:
   limits:

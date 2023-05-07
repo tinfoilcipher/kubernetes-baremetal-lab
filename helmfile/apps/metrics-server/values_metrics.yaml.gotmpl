@@ -1,5 +1,5 @@
 image:
-  tag: v0.6.1
+  tag: {{ .Values.metricsServer.imageTags.server }}
   pullPolicy: {{ .Values.global.imagePullPolicy }}
 
 resources:

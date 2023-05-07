@@ -3,7 +3,7 @@ global:
     namespace: cert-manager
 
 image:
-  tag: v1.10.0
+  tag: {{ .Values.certManager.imageTags.certManager }}
   pullPolicy: {{ .Values.global.imagePullPolicy }}
 
 resources:
@@ -18,8 +18,7 @@ installCRDs: true
 
 webhook:
   image:
-    repository: "{{ .Values.global.customImageRegistry }}/jetstack/cert-manager-webhook"
-    tag: v1.10.0
+    tag: {{ .Values.certManager.imageTags.webhook }}
     pullPolicy: {{ .Values.global.imagePullPolicy }}
 
   resources:
@@ -32,8 +31,7 @@ webhook:
 
 cainjector:
   image:
-    repository: "{{ .Values.global.customImageRegistry }}/jetstack/cert-manager-cainjector"
-    tag: v1.10.0
+    tag: {{ .Values.certManager.imageTags.cainjector }}
     pullPolicy: {{ .Values.global.imagePullPolicy }}
 
   resources:
@@ -46,6 +44,5 @@ cainjector:
 
 startupapicheck:
   image:
-    repository: "{{ .Values.global.customImageRegistry }}/jetstack/cert-manager-ctl"
-    tag: v1.10.0
+    tag: {{ .Values.certManager.imageTags.startupapicheck }}
     pullPolicy: {{ .Values.global.imagePullPolicy }}

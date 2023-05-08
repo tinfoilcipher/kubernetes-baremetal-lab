@@ -13,10 +13,10 @@ If you insist!
 
 Prereqs:
 
-- (ansible)[https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html]
-- (kubectl)[https://kubernetes.io/docs/tasks/tools/#kubectl]
-- (kubeadm)[https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/]
-- (helmfile)[https://github.com/helmfile/helmfile]
+- [ansible](https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
+- [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
+- [helmfile](https://github.com/helmfile/helmfile)
 
 Update the values in:
 

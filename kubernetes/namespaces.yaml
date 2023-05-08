@@ -1,0 +1,41 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: cert-manager
+  labels:
+    name: cert-manager
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: ingress-nginx
+  labels:
+    name: ingress-nginx
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: kubernetes-dashboard
+  labels:
+    name: kubernetes-dashboard
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: metallb-system
+  labels:
+    name: metallb-system
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: metrics-server
+  labels:
+    name: metrics-server
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: nfs-provisioner
+  labels:
+    name: nfs-provisioner

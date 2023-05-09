@@ -21,7 +21,7 @@ ingressNginx:
   imageTags:
     ingressNginx: v1.4.0
     admissionWebhooks: v20220916-gd32f8c343
-  metalLBloadBalancerIP: 192.168.1.225 #--Host network IP to use for all ingresses
+  metalLBloadBalancerIP: 192.168.1.225 #--Host network IP to use for all ingresses. Must be in your MetalLB scope
   httpEnabled: false
   httpsEnabled: true
 
@@ -32,13 +32,17 @@ certManager:
     cainjector: v1.10.0
     startupapicheck: v1.10.0
 
-metricsServer:
+netbox:
   imageTags:
-    server: v0.6.1
-  tcpPort: 443
-
-kubernetesDashboard:
-  imageTags:
-    dashboard: v2.7.0
-  hostname: "" #--hostname for your dashboard. E.G. dashboard.tinfoilcipher.co.uk
-  tcpPort: 80
+    netbox: v3.2.8
+    postres: 14.5.0-debian-11-r31
+  app:
+    loginRequired: true
+    adminUsername: netboxadmin
+    adminEmail: "" #--someone@somewhere.com
+    hostname: "" #--Host address for netbox I.E. netbox.tinfoilcipher.co.uk
+  db:
+    hostname: netbox-postgresql.netbox.svc.cluster.local
+    dbName: netbox
+    adminUsername: netbox
+    tcpPort: 5432

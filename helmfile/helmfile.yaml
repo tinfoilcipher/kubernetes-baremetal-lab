@@ -3,8 +3,7 @@ helmfiles:
   - apps/metallb/helmfile.yaml
   - apps/ingress-nginx/helmfile.yaml
   - apps/cert-manager/helmfile.yaml
-  - apps/metrics-server/helmfile.yaml
-  - apps/kubernetes-dashboard/helmfile.yaml
+  - apps/netbox/helmfile.yaml
 
 environments:
   default:

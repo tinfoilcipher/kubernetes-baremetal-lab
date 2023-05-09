@@ -1,0 +1,31 @@
+image:
+  repository: bitnami/postgresql
+  tag: {{ .Values.imageTags.postres }}
+  pullPolicy: {{ .Values.global.imagePullPolicy }}
+
+resources:
+  limits: 
+    cpu: "150m"
+    memory: "512Mi"
+  requests:
+    cpu: "100m"
+    memory: "512Mi"
+
+auth:
+  enablePostgresUser: true
+  postgresPassword: {{ requiredEnv "NETBOX_DB_ROOT_PASSWORD" }}
+  database: {{ .Values.netbox.db.dbName }}
+  username: {{ .Values.netbox.db.adminUsername }}
+  password: {{ requiredEnv "NETBOX_DB_ADMIN_PASSWORD" }}
+  
+primary:
+  resources:
+    limits: 
+      cpu: "200m"
+      memory: "256Mi"
+    requests:
+      cpu: "150m"
+      memory: "128Mi"
+  service:
+    ports:
+      postgresql: {{ .Values.netbox.db.tcpPort }}

@@ -1,0 +1,36 @@
+repositories:
+  - name: bootc
+    url: 	https://charts.boo.tc
+  - name: bitnami
+    url: 	https://charts.bitnami.com/bitnami
+
+releases:
+  - name: netbox-postgresql
+    namespace: netbox
+    chart: bitnami/postgresql
+    version: 11.9.11
+    atomic: true
+    timeout: 600
+    labels:
+      mcapp: netbox
+      mctier: apps
+    values:
+      - values_postgres.yaml.gotmpl
+
+  - name: netbox
+    namespace: netbox
+    chart: bootc/netbox
+    version: 4.1.1
+    atomic: true
+    timeout: 900
+    labels:
+      mcapp: netbox
+      mccomponent: netbox
+      
+    values:
+      - values_netbox.yaml.gotmpl
+
+environments:
+  default:
+    values:
+    - ../../values.yaml

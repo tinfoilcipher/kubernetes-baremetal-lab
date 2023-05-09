@@ -1,0 +1,73 @@
+image:
+  tag: {{ .Values.imageTags.netbox }}
+  pullPolicy: {{ .Values.global.imagePullPolicy }}
+
+resources:
+  limits:
+    cpu: "1000m"
+    memory: "768Mi"
+  requests:
+    cpu: "750m"
+    memory: "768Mi"
+
+worker:
+  resources:
+    limits: 
+      cpu: "250m"
+      memory: "512Mi"
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+
+loginRequired: {{ .Values.netbox.app.loginRequired }}
+
+persistence:
+  storageClass: nfs-provisioner
+
+#--Disable bundled PostgreSQL and use external
+postgresql:
+  enabled: false
+externalDatabase:
+  host: {{ .Values.netbox.db.hostname }}
+  database: {{ .Values.netbox.db.dbName }}
+  port: {{ .Values.netbox.db.tcpPort }}
+  username: {{ .Values.netbox.db.adminUsername }}
+  password: {{ requiredEnv "NETBOX_DB_ADMIN_PASSWORD" }}
+superuser:
+  name: {{ .Values.netbox.app.adminUsername }}
+  password: {{ requiredEnv "NETBOX_ADMIN_PASSWORD" }}
+  email: {{ .Values.netbox.app.adminEmail }}
+
+housekeeping:
+  enabled: false
+
+redis:
+  replica:
+    replicaCount: 1
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: "true"
+  className:  {{ .Values.global.ingressClass }}
+  annotations:
+    cert-manager.io/cluster-issuer: ca-issuer
+  hosts:
+    - host: {{ .Values.netbox.app.hostname }}
+      paths:
+        - pathType: Prefix
+          path: /
+          backend:
+            service:
+              name: netbox
+              port:
+                number: 80
+  tls:
+    - hosts:
+      - {{ .Values.netbox.app.hostname }}
+      secretName: netbox-certificate
+
+extraEnvs:
+- name: NETBOX_DELETE_LEGACY_DATA
+  value: "true"

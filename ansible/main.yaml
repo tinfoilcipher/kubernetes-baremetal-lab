@@ -7,7 +7,7 @@
 
 - name: Kubernetes Control Plane
   hosts: kubernetes_control_nodes
-  gather_facts: false
+  gather_facts: true
   roles:
   - role: kubernetes-control
     kube_api_server_vip: 192.168.1.220
